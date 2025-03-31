@@ -1,6 +1,7 @@
 import sqlite3
 import hashlib
 import datetime
+import os
 from flask import Flask,request,jsonify,session
 
 app=Flask(__name__)
@@ -124,4 +125,4 @@ def status():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
