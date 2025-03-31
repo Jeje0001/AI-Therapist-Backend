@@ -22,7 +22,7 @@ def initialize_database():
               timestamp TEXT)''')
     conn.commit()
     conn.close()
-
+initialize_database()
 
 @app.route("/signup",methods=["POST"])
 
