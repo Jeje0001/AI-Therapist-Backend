@@ -107,6 +107,23 @@ def chat():
     conn.close()
     return jsonify({"response":"I am here for you"})
 
+@app.route("/clear",methods=["POST"])
+
+def clear():
+    if "user_id" not in session:
+        return jsonify({"response":"Login First"})
+    user_id=session["user_id"]
+
+    try:
+        conn=sqlite3.connect("therapist.db")
+        c= conn.cursor()
+        c.execute("DELETE FROM chats where user_id=?",(user_id,))
+        conn.commit()
+        conn.close()
+        return jsonify({"response":"Chat history cleared"})
+    except sqlite3.OperationalError:
+        return jsonify({"response":"Try again later"})
+
 @app.route("/history",methods=["GET"])
 
 def history():
@@ -141,4 +158,4 @@ def status():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 4000)), debug=True)
