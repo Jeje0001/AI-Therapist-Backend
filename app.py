@@ -20,6 +20,7 @@ def initialize_database():
               user_message TEXT, 
               response TEXT, 
               timestamp TEXT)''')
+    c.execute("CREATE INDEX IF NOT EXISTS idx_user_time ON chats(user_id, timestamp)")
     conn.commit()
     conn.close()
 initialize_database()
@@ -106,6 +107,21 @@ def chat():
     conn.close()
     return jsonify({"response":"I am here for you"})
 
+@app.route("/history",methods=["GET"])
+
+def history():
+    if "user_id" not in session:
+        return jsonify({"response":"Please login"})
+    user_id=session["user_id"]
+    try:
+        conn = sqlite3.connect("therapist.db")
+        c = conn.cursor()
+        c.execute("SELECT id, user_message, response, timestamp FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 5", (user_id,))
+        chats = [{"id": row[0], "message": row[1], "response": row[2], "timestamp": row[3]} for row in c.fetchall()]
+        conn.close()
+        return jsonify({"response": "Chat history", "chats": chats})
+    except sqlite3.OperationalError:
+        return jsonify({"response": "No history yet"})
 
 @app.route("/logout",methods=["POST"])
 
