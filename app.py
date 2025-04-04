@@ -95,17 +95,31 @@ def chat():
     
     conn=sqlite3.connect("therapist.db")
     c=conn.cursor()
+    c.execute("SELECT user_message, response FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 3", (session["user_id"],))
+    prior_chats = c.fetchall()
+    if prior_chats:
+        recall_parts = []
+        prior_chats_reversed = list(reversed(prior_chats))  
+        for i in range(len(prior_chats_reversed)):
+            user_msg, therapist_response = prior_chats_reversed[i]
+            recall_parts.append(f"User said ‘{user_msg},’ then therapist replied ‘{therapist_response}’")
+            if i == len(prior_chats_reversed) - 1:
+                recall_parts.append(f"User said ‘{user_message}’")
+        recall = ", ".join(recall_parts) + "—I’m here for you"
+    else:
+        recall = "I’m here for you"
     try:
         c.execute('''INSERT INTO chats
                 (user_id, user_message, response, timestamp) 
                 VALUES (?, ?, ?, ?)''', 
-                (session["user_id"], user_message, "I’m here for you", datetime.datetime.now().isoformat()))
+                (session["user_id"], user_message, recall, datetime.datetime.now().isoformat()))
+        conn.commit()
+
     except sqlite3.OperationalError:
         return jsonify({"response": "Try again later"})
         
-    conn.commit()
     conn.close()
-    return jsonify({"response":"I am here for you"})
+    return jsonify({"response":recall})
 
 @app.route("/clear",methods=["POST"])
 
