@@ -3,6 +3,7 @@ import hashlib
 import datetime
 from dotenv import load_dotenv
 import os
+import psycopg2
 import openai
 load_dotenv()
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -11,8 +12,10 @@ from flask import Flask,request,jsonify,session
 app=Flask(__name__)
 app.secret_key="AyomideTherapist2025!xK9p"
 
+def get_db_connection():
+    return psycopg2.connect(os.getenv("postgresql://therapist_db_1r14_user:xk3scQAPUVgxlo8bdRDcPKPnqib7WK96@dpg-cvoedcadbo4c73b2ita0-a/therapist_db_1r14"))
 def initialize_database():
-    conn=sqlite3.connect("therapist.db")
+    conn = get_db_connection()    
     c=conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, 
               username TEXT UNIQUE, 
@@ -42,7 +45,7 @@ def signup():
     password=data["password"]
 
     password_hash=hashlib.sha256(password.encode()).hexdigest()
-    conn=sqlite3.connect("therapist.db")
+    conn = get_db_connection()
     c=conn.cursor()
     try:
         c.execute('''INSERT INTO users (username, email, password_hash) 
@@ -67,7 +70,7 @@ def login():
     password=data["password"]
 
     password_hash= hashlib.sha256(password.encode()).hexdigest()
-    conn=sqlite3.connect("therapist.db")
+    conn = get_db_connection()
     c=conn.cursor()
     c.execute("SELECT id, password_hash FROM users WHERE email = ?", (email,))
 
@@ -97,7 +100,7 @@ def chat():
     if not user_message:
         return  jsonify({"response":"No message"})
     
-    conn=sqlite3.connect("therapist.db")
+    conn = get_db_connection()
     c=conn.cursor()
     c.execute("SELECT user_message, response FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 3", (session["user_id"],))
     prior_chats = c.fetchall()
@@ -137,7 +140,7 @@ def clear():
     user_id=session["user_id"]
 
     try:
-        conn=sqlite3.connect("therapist.db")
+        conn = get_db_connection()
         c= conn.cursor()
         c.execute("DELETE FROM chats where user_id=?",(user_id,))
         conn.commit()
@@ -153,7 +156,7 @@ def history():
         return jsonify({"response":"Please login"})
     user_id=session["user_id"]
     try:
-        conn = sqlite3.connect("therapist.db")
+        conn = get_db_connection()
         c = conn.cursor()
         c.execute("SELECT id, user_message, response, timestamp FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 5", (user_id,))
         chats = [{"id": row[0], "message": row[1], "response": row[2], "timestamp": row[3]} for row in c.fetchall()]
