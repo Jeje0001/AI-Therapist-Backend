@@ -13,16 +13,16 @@ app=Flask(__name__)
 app.secret_key="AyomideTherapist2025!xK9p"
 
 def get_db_connection():
-    return psycopg2.connect(os.getenv("postgresql://therapist_db_1r14_user:xk3scQAPUVgxlo8bdRDcPKPnqib7WK96@dpg-cvoedcadbo4c73b2ita0-a/therapist_db_1r14"))
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 def initialize_database():
     conn = get_db_connection()    
     c=conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, 
+    c.execute('''CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, 
               username TEXT UNIQUE, 
               email TEXT UNIQUE, 
               password_hash TEXT, 
               subscription_status TEXT DEFAULT 'free')''')
-    c.execute('''CREATE TABLE IF NOT EXISTS  chats (id INTEGER PRIMARY KEY, 
+    c.execute('''CREATE TABLE IF NOT EXISTS  chats (id SERIAL PRIMARY KEY, 
               user_id INTEGER, 
               user_message TEXT, 
               response TEXT, 
@@ -48,9 +48,9 @@ def signup():
     conn = get_db_connection()
     c=conn.cursor()
     try:
-        c.execute('''INSERT INTO users (username, email, password_hash) 
-                VALUES (?, ?, ?)''', (username, email, password_hash))
-    except sqlite3.IntegrityError:
+       c.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
+                  (username, email, password_hash))
+    except psycopg2.IntegrityError:
          conn.close()
          return jsonify({"response": "Email or username taken"})
     
@@ -126,7 +126,7 @@ def chat():
                 (session["user_id"], user_message, openai_response, datetime.datetime.now().isoformat()))
         conn.commit()
 
-    except sqlite3.OperationalError:
+    except psycopg2.OperationalError:
         return jsonify({"response": "Try again later"})
         
     conn.close()
@@ -146,7 +146,7 @@ def clear():
         conn.commit()
         conn.close()
         return jsonify({"response":"Chat history cleared"})
-    except sqlite3.OperationalError:
+    except psycopg2.OperationalError:
         return jsonify({"response":"Try again later"})
 
 @app.route("/history",methods=["GET"])
@@ -162,7 +162,7 @@ def history():
         chats = [{"id": row[0], "message": row[1], "response": row[2], "timestamp": row[3]} for row in c.fetchall()]
         conn.close()
         return jsonify({"response": "Chat history", "chats": chats})
-    except sqlite3.OperationalError:
+    except psycopg2.OperationalError:
         return jsonify({"response": "No history yet"})
 
 @app.route("/logout",methods=["POST"])
