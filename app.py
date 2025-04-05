@@ -72,7 +72,7 @@ def login():
     password_hash= hashlib.sha256(password.encode()).hexdigest()
     conn = get_db_connection()
     c=conn.cursor()
-    c.execute("SELECT id, password_hash FROM users WHERE email = ?", (email,))
+    c.execute("SELECT id, password_hash FROM users WHERE email = %s", (email,))
 
     user=c.fetchone()
 
@@ -102,7 +102,7 @@ def chat():
     
     conn = get_db_connection()
     c=conn.cursor()
-    c.execute("SELECT user_message, response FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 3", (session["user_id"],))
+    c.execute("SELECT user_message, response FROM chats WHERE user_id = %s ORDER BY timestamp DESC LIMIT 3", (session["user_id"],))
     prior_chats = c.fetchall()
     if prior_chats:
      history = ", ".join([f"User: {user_msg}, Therapist: {therapist_response}" for user_msg, therapist_response in prior_chats])
@@ -142,7 +142,7 @@ def clear():
     try:
         conn = get_db_connection()
         c= conn.cursor()
-        c.execute("DELETE FROM chats where user_id=?",(user_id,))
+        c.execute("DELETE FROM chats where user_id=%s",(user_id,))
         conn.commit()
         conn.close()
         return jsonify({"response":"Chat history cleared"})
@@ -158,7 +158,7 @@ def history():
     try:
         conn = get_db_connection()
         c = conn.cursor()
-        c.execute("SELECT id, user_message, response, timestamp FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 5", (user_id,))
+        c.execute("SELECT id, user_message, response, timestamp FROM chats WHERE user_id = %s ORDER BY timestamp DESC LIMIT 5", (user_id,))
         chats = [{"id": row[0], "message": row[1], "response": row[2], "timestamp": row[3]} for row in c.fetchall()]
         conn.close()
         return jsonify({"response": "Chat history", "chats": chats})
