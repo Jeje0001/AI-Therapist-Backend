@@ -1,1 +1,4 @@
 flask
+sqlite3
+openai
+python-dotenv

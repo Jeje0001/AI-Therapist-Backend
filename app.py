@@ -1,7 +1,11 @@
 import sqlite3
 import hashlib
 import datetime
+from dotenv import load_dotenv
 import os
+import openai
+load_dotenv()
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 from flask import Flask,request,jsonify,session
 
 app=Flask(__name__)
@@ -98,28 +102,32 @@ def chat():
     c.execute("SELECT user_message, response FROM chats WHERE user_id = ? ORDER BY timestamp DESC LIMIT 3", (session["user_id"],))
     prior_chats = c.fetchall()
     if prior_chats:
-        recall_parts = []
-        prior_chats_reversed = list(reversed(prior_chats))  
-        for i in range(len(prior_chats_reversed)):
-            user_msg, therapist_response = prior_chats_reversed[i]
-            recall_parts.append(f"User said ‘{user_msg},’ then therapist replied ‘{therapist_response}’")
-            if i == len(prior_chats_reversed) - 1:
-                recall_parts.append(f"User said ‘{user_message}’")
-        recall = ", ".join(recall_parts) + "—I’m here for you"
+     history = ", ".join([f"User: {user_msg}, Therapist: {therapist_response}" for user_msg, therapist_response in prior_chats])
     else:
-        recall = "I’m here for you"
+        history="No prior chats"
+    prompt = f"You are a warm, empathetic therapist in a natural conversation. Use the chat history to understand the user's emotional state and context: [{history}]. The user just said: {user_message}. Reflect their words gently, acknowledge their feelings, and respond with care. Ask a thoughtful question or offer a small, supportive suggestion that builds naturally on what they’ve shared."
+    messages = [
+        {"role": "system", "content": "You’re a supportive therapist—respond naturally and concisely."},
+        {"role": "user", "content": prompt}  
+    ]
+
+    try:
+        response = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
+        openai_response = response.choices[0].message.content
+    except openai.OpenAIError as e:
+        return jsonify({"response": f"Therapist offline error: {str(e)}"})
     try:
         c.execute('''INSERT INTO chats
                 (user_id, user_message, response, timestamp) 
                 VALUES (?, ?, ?, ?)''', 
-                (session["user_id"], user_message, recall, datetime.datetime.now().isoformat()))
+                (session["user_id"], user_message, openai_response, datetime.datetime.now().isoformat()))
         conn.commit()
 
     except sqlite3.OperationalError:
         return jsonify({"response": "Try again later"})
         
     conn.close()
-    return jsonify({"response":recall})
+    return jsonify({"response":openai_response})
 
 @app.route("/clear",methods=["POST"])
 
