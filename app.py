@@ -14,6 +14,7 @@ app.secret_key="AyomideTherapist2025!xK9p"
 
 def get_db_connection():
     return psycopg2.connect(os.getenv("DATABASE_URL"))
+
 def initialize_database():
     conn = get_db_connection()    
     c=conn.cursor()
@@ -122,7 +123,7 @@ def chat():
     try:
         c.execute('''INSERT INTO chats
                 (user_id, user_message, response, timestamp) 
-                VALUES (?, ?, ?, ?)''', 
+                VALUES (%s, %s, %s, %s)''', 
                 (session["user_id"], user_message, openai_response, datetime.datetime.now().isoformat()))
         conn.commit()
 
