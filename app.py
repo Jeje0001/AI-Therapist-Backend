@@ -119,6 +119,7 @@ def chat():
         response = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
         openai_response = response.choices[0].message.content
     except openai.OpenAIError as e:
+        print(e)
         return jsonify({"response": f"Therapist offline error: {str(e)}"})
     try:
         c.execute('''INSERT INTO chats
