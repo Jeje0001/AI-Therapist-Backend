@@ -1,0 +1,147 @@
+
+.navbar {
+    background-color: #404EED !important; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
+  }
+
+  .nav-link {
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: #00DDEB;
+    text-shadow: 0 0 5px rgba(0, 221, 235, 0.4);
+  }
+.signup{
+    background-color: #00DDEB;
+    border-radius: 25px ;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 7px;
+}
+
+
+.signup:hover{
+    box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+    
+    color: white;
+}
+.login{
+    color: white;
+    border: 2px solid #00DDEB;
+    border-radius: 25px ;
+
+    background: transparent;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 7px;
+    
+}
+
+.login:hover{
+    box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+    background-color: #00DDEB;
+
+    
+    color: white;
+
+}
+
+nav{
+    font-family: Inter;
+
+}
+
+.brand:hover{
+  text-shadow: 0 0 8px rgba(0, 221, 235, 0.6);
+    color: white;
+    transition: 3s;
+
+}
+* {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .navbar-toggler {
+    border: none;
+    background-color: transparent;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23FFFFFF' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.7)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+
+  .nav-item {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .offcanvas {
+    background-color: #404EED !important; 
+    color: white;
+  }
+
+  .offcanvas .nav-link {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+  }
+  
+  .offcanvas .nav-link:hover {
+    color: #00DDEB;
+    text-shadow: 0 0 5px rgba(0, 221, 235, 0.4);
+  }
+
+  .offcanvas .btn {
+    width: 100%;
+    max-width: 250px;
+    align-self: center;
+  }
+
+  .offcanvas-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .offcanvas-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+
+  .btn-close {
+    filter: invert(1);
+  }
+
+  .offcanvas.offcanvas-end {
+    transition: transform 0.3s ease-in-out;
+  }
+  .offcanvas-backdrop,
+  .offcanvas-backdrop.show {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1040 !important;
+    background: linear-gradient(to right, #1A2A44, #0A0F1F) !important;
+    backdrop-filter: none !important;
+    transition: background-color 0.3s ease;
+    opacity: 1 !important;              
+
+  }
+
+  @media (max-width: 576px) {
+    .nav-link {
+      font-size: 0.95rem;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }

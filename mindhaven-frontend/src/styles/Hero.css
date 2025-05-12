@@ -1,0 +1,232 @@
+.hero-section {
+    background: linear-gradient(
+        135deg,
+        #1a2a44 0%,
+        #3b2a6d 50%,
+        #404eed 100%
+      );
+      position: relative;
+      overflow: hidden;
+    padding-top: 120px;
+    padding-bottom: 100px;  
+    min-height: 100vh;
+  }
+  @media (max-width: 768px) {
+    .hero-section {
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+  }
+  
+ 
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    flex-direction: row;
+  }
+
+  @media (max-width: 768px) {
+    .hero-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .hero-text {
+    max-width: 600px;
+    color: white;
+    padding: 1rem 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .hero-text h1 {
+    font-size: 4.5rem;       
+    font-weight: 700;
+    line-height: 1.1;
+    text-shadow: 0 0 10px rgba(255,255,255,0.2);
+    max-width: 500px;        
+  }
+  @media (max-width: 768px) {
+    .hero-text {
+      text-align: center;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .hero-buttons button {
+      width: 80%;
+      max-width: 300px;
+    }
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: start;
+  }
+
+  .signup{
+    background-color: #00DDEB;
+    border-radius: 25px ;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 7px;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #00DDEB, #00B8D9);
+}
+
+
+.signup:hover{
+    box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+    
+    color: white;
+    filter: brightness(1.1);
+    transition: filter 200ms ease-out;
+  
+}
+
+.login{
+    color: white;
+    border: 2px solid #00DDEB;
+    border-radius: 25px ;
+
+    background: transparent;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 7px;
+    padding: 0.75rem 1.5rem;
+
+    
+}
+
+.login:hover{
+    box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+    background-color: #00DDEB;
+
+    
+    color: white;
+
+}
+
+.hero-image{
+    max-width: 500px;
+    width: 100%;
+    margin-right: -10vw;    
+
+}
+
+.hero-section {
+    position: relative;      
+    overflow: visible;       
+  }
+
+  
+  .hero-image img {
+    position: relative;
+    right: 23vw;
+    max-width: none;        
+    width: 60vw;             
+  }
+
+  .hero-buttons .btn.solid {
+  background: #404eed;    
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;     
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hero-buttons .btn.solid:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(255,255,255,0.3);
+}
+
+.hero-buttons .btn.outline {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  transition: transform 0.2s, background 0.2s;
+}
+.hero-buttons .btn.outline:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.05);
+}
+
+
+@media (max-width: 1200px) {
+    .hero-content {
+      gap: 2rem;
+    }
+    .hero-image img {
+      width: 50vw;     
+      right: 15vw;     
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-content {
+        display: flex;           
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+    }
+    .hero-text h1 {
+      font-size: 2rem;   
+      line-height: 1.2;
+    }
+    .hero-text p {
+      font-size: 1rem;   
+    }
+    .hero-buttons {
+      justify-content: center;
+    }
+    .hero-image {
+      margin-right: 0;
+      margin-top: 2rem;
+    }
+    .hero-image img {
+      position: static;
+      width: 80vw;
+      max-width: 300px;
+      right: auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero-section {
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+    .hero-text h1 {
+      font-size: 1.6rem;
+    }
+    .hero-text p {
+      font-size: 0.9rem;
+    }
+    .hero-buttons button {
+      width: 100%;
+    }
+  }
+  
