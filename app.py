@@ -5,12 +5,21 @@ from dotenv import load_dotenv
 import os
 import psycopg2
 import openai
+from flask_cors import CORS
+
 load_dotenv()
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 from flask import Flask,request,jsonify,session
 
 app=Flask(__name__)
 app.secret_key="AyomideTherapist2025!xK9p"
+
+CORS(app, supports_credentials=True, origins=[
+    "http://localhost:5173",                        
+    "https://ai-therapist-frontend-f5xb.onrender.com"   
+])
+
+
 
 def get_db_connection():
     return psycopg2.connect(os.getenv("DATABASE_URL"))
