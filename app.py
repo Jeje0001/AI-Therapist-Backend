@@ -16,7 +16,7 @@ app.secret_key="AyomideTherapist2025!xK9p"
 
 CORS(app, supports_credentials=True, origins=[
     "http://localhost:5173",                        
-    "https://your-frontend-app-name.onrender.com"   
+    "https://ai-therapist-frontend-f5xb.onrender.com"   
 ])
 
 
